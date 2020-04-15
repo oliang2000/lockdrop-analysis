@@ -1,4 +1,5 @@
 import json
+import csv
 
 events_path = './data/events.json'
 txs_path = './data/txs.json'
@@ -61,3 +62,13 @@ for (address, plm) in plm_list.items():
 # /1e-18 because of wei.
 alpha_1 = TOTAL_LOCKDROP_PLM/total_issue_ratio/1e-18
 print('alpha_1', alpha_1)
+alpha_2 = alpha_1 * 5/6
+alpha_3 = alpha_1 * 4/6
+
+print('alpha_2', alpha_2)
+print('alpha_3', alpha_3)
+
+with open('data/out.csv', 'w') as f:
+    writer = csv.writer(f)
+    for (address, plm) in plm_list.items():
+        writer.writerow([address, plm])
