@@ -1,6 +1,7 @@
 import json
 import csv
 from introducers import introducers
+from crypto import recover_transaction
 
 events_path = './data/events.json'
 txs_path = './data/txs.json'
@@ -87,9 +88,12 @@ for tx in txs['result']:
         add_list_num(plm_ref_list, introducer, issued_aff_plm)
         add_list_num(plm_intro_list, address, issued_aff_plm)        
 
+# recover public keys
+keys = { tx['from']:recover_transaction(tx['hash']) for tx in txs['result'] }
 
 for (address, plm) in plm_list.items():
     print(address, plm)
+    print(address, keys[address])
 
 # /1e-18 because of wei.
 alpha_1 = TOTAL_LOCKDROP_PLM/total_issue_ratio/1e-18
@@ -106,3 +110,8 @@ with open('data/out.csv', 'w') as f:
     for (address, plm) in plm_list.items():
         all_plm = plm + get_or(plm_ref_list, address) + get_or(plm_intro_list, address)
         writer.writerow([address, plm, get_or(plm_ref_list, address), get_or(plm_intro_list, address), all_plm])
+
+with open('data/holders.csv', 'w') as f:
+    writer = csv.writer(f)
+    for (address, plm) in plm_list.items():
+        writer.writerow([keys[address], plm])
