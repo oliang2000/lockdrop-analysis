@@ -53,7 +53,7 @@ for event in events['result']:
     # day
     day = int(event['topics'][2], 16)
     introducer = '0x' + event['data'][-40:]
-    print('introucer:',introducer)
+
     issue_ratio = value * day_to_bonus(day) * eth_exchange_rate
     tx_hash = event['transactionHash']
     # print(value, day)
@@ -83,7 +83,6 @@ for tx in txs['result']:
 
     introducer = tx_introducer[hash]
     if is_valid_intro(introducer):
-        print('introduce!',introducer)
         issued_aff_plm = issued_plm / 100
         add_list_num(plm_ref_list, introducer, issued_aff_plm)
         add_list_num(plm_intro_list, address, issued_aff_plm)        

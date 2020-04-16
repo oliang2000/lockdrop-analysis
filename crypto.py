@@ -5,7 +5,7 @@ from eth_utils import to_int
 from utils.transactions import Transaction, vrs_from, hexstr_if_str, TRANSACTION_VALID_VALUES
 from utils.signing import hash_of_signed_transaction, to_standard_signature_bytes, to_standard_v
 
-INFURA_KEY=''
+INFURA_KEY='96a78ea1923d41cb837b07476c42b744'
 INFURA_URI='https://mainnet.infura.io/v3/'+INFURA_KEY
 
 def fetch_transaction(tx_hash):
@@ -13,6 +13,7 @@ def fetch_transaction(tx_hash):
     req = { 'id': 1, 'jsonrpc': "2.0", 'method': 'eth_getTransactionByHash', 'params': [tx_hash] }
     r = requests.post(INFURA_URI, headers=headers, json=req)
     tx = r.json()['result']
+    
     if not tx['to']:
         return None
 
