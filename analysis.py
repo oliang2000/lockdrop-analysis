@@ -118,7 +118,7 @@ print('alpha_3', alpha_3)
 
 with open('data/out.csv', 'w') as f:
     writer = csv.writer(f)
-    writer.writerow(['address', 'normal', 'ref_bonnus', 'intro_bonnus', 'all'])
+    writer.writerow(['address', 'lock return', 'ref_bonnus', 'intro_bonnus', 'total return'])
     for (address, plm) in plm_list.items():
         all_plm = plm + get_or(plm_ref_list, address) + get_or(plm_intro_list, address)
         print([address, plm, get_or(plm_ref_list, address), get_or(plm_intro_list, address), all_plm])
