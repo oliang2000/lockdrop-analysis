@@ -52,8 +52,9 @@ FEMTO = 1000000000000000
 TOTAL_ISSUE_PLM = 500000000 * FEMTO
 TOTAL_LOCKDROP_PLM = TOTAL_ISSUE_PLM * 17 // 20
 total_issue_ratio = 0
-eth_exchange_rate = 15636
-eth_exchange_rate_div = 100
+# curl -X GET "https://api.coingecko.com/api/v3/coins/ethereum/history?date=01-05-2020&localization=false" -H "accept: application/json"
+eth_exchange_rate = 20555600541063674
+eth_exchange_rate_div = 100000000000000
 WEI = 1000000000000000000
 
 tx_issue_rate = {}
@@ -67,6 +68,7 @@ for event in events['result']:
     day = int(event['topics'][2], 16)
     introducer = '0x' + event['data'][-40:]
     issue_ratio = value * day_to_bonus(day) * eth_exchange_rate // eth_exchange_rate_div
+    print('issue_ratio', issue_ratio)
     tx_hash = event['transactionHash']
 
     total_issue_ratio += issue_ratio
@@ -107,14 +109,23 @@ for (address, plm) in plm_list.items():
     print(address, keys[address])
 
 # /1e-18 because of wei.
-alpha_1 = TOTAL_LOCKDROP_PLM // total_issue_ratio
+print('total/total', TOTAL_LOCKDROP_PLM * WEI, total_issue_ratio * FEMTO);
+alpha_1 = (TOTAL_LOCKDROP_PLM * WEI) / (total_issue_ratio * FEMTO)
 # /(WEI/FEMTO)
 print('alpha_1', alpha_1)
-alpha_2 = alpha_1 * 5/6
-alpha_3 = alpha_1 * 4/6
+alpha_2 = alpha_1 * 5 / 6
+alpha_3 = alpha_1 * 4 / 6
 
 print('alpha_2', alpha_2)
 print('alpha_3', alpha_3)
+
+with open('data/alpha.csv', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(['alpha', 'float value', 'numerator', 'denominator'])
+    writer.writerow(['alpha_1', alpha_1, TOTAL_LOCKDROP_PLM * WEI, total_issue_ratio * FEMTO])
+    writer.writerow(['alpha_2', alpha_2, TOTAL_LOCKDROP_PLM * WEI * 5, total_issue_ratio * FEMTO * 6])
+    writer.writerow(['alpha_3', alpha_3, TOTAL_LOCKDROP_PLM * WEI * 4, total_issue_ratio * FEMTO * 6])
+    writer.writerow(['ETH valua at May 1', eth_exchange_rate/eth_exchange_rate_div, eth_exchange_rate, eth_exchange_rate_div])
 
 with open('data/out.csv', 'w') as f:
     writer = csv.writer(f)
