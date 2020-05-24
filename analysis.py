@@ -68,7 +68,7 @@ for event in events['result']:
     day = int(event['topics'][2], 16)
     introducer = '0x' + event['data'][-40:]
     issue_ratio = value * day_to_bonus(day) * eth_exchange_rate // eth_exchange_rate_div
-    print('issue_ratio', issue_ratio)
+    # print('issue_ratio', issue_ratio)
     tx_hash = event['transactionHash']
 
     total_issue_ratio += issue_ratio
@@ -104,9 +104,9 @@ for tx in txs['result']:
 # recover public keys
 keys = { tx['from']:recover_transaction(tx['hash']) for tx in txs['result'] }
 
-for (address, plm) in plm_list.items():
-    print(address, plm)
-    print(address, keys[address])
+# for (address, plm) in plm_list.items():
+#     print(address, plm)
+#     print(address, keys[address])
 
 # /1e-18 because of wei.
 print('total/total', TOTAL_LOCKDROP_PLM * WEI, total_issue_ratio * FEMTO);
@@ -134,10 +134,18 @@ with open('data/out.csv', 'w') as f:
         all_plm = plm + get_or(plm_ref_list, address) + get_or(plm_intro_list, address)
         print([address, plm, get_or(plm_ref_list, address), get_or(plm_intro_list, address), all_plm])
         writer.writerow([address, bg_str(plm), get_or_str(plm_ref_list, address), get_or_str(plm_intro_list, address), bg_str(all_plm)])
+
+    for (address, plm) in plm_ref_list.items():
+        if get_or(plm_list, address) != 0:
+            continue
+        all_plm = plm
+        print([address, 0, plm, 0, all_plm])
+        writer.writerow([address, bg_str(0), bg_str(plm), bg_str(0), bg_str(all_plm)])
+
 print(type(TOTAL_LOCKDROP_PLM))
 
-with open('data/holders.csv', 'w') as f:
-    writer = csv.writer(f)
-    for (address, plm) in plm_list.items():
-        all_plm = plm + get_or(plm_ref_list, address) + get_or(plm_intro_list, address)
-        writer.writerow([keys[address], bg_str(all_plm)])
+# with open('data/holders.csv', 'w') as f:
+#     writer = csv.writer(f)
+#     for (address, plm) in plm_list.items():
+#         all_plm = plm + get_or(plm_ref_list, address) + get_or(plm_intro_list, address)
+#         writer.writerow([keys[address], bg_str(all_plm)])
