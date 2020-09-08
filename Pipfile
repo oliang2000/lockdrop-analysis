@@ -18,3 +18,5 @@ python_version = "3.7"
 [scripts]
 get = "python get.py"
 an = "python analysis.py"
+load2 = "python subscan_load.py"
+an2 = "python 2nd_analysis.py"
