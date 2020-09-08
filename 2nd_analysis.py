@@ -36,5 +36,20 @@ for i in range(0,500):
                 sum += int(value)
     except:
         print('not found.')
-        print('total issued plm', sum)
+        # total issued with company address.
+        total_issued = sum * 100 // 65
+        # company
+        company_issued = total_issued * 35 // 100
+        print('total issued lockdrop plm: ', sum)
+        print('total issued company plm: ', company_issued)
+        print('total issued 2nd plm: ', total_issued)
+
+        first = 500000000000000000000000
+        first_company = 500000000000000000000000 * 15 // 100
+
+        whole = first + total_issued
+        whole_compamy = first_company + company_issued
+        print('total issued whole', whole)
+        print('percentage of company', whole_compamy / whole)
+        # total
         exit(0)
