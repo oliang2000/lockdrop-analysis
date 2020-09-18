@@ -110,6 +110,9 @@ dmypy.json
 # Mac
 .DS_Store
 
+# 2nd
+*_events.json
+
 # End of https://www.gitignore.io/api/python
 Last Modified:
 04/16/2020 01:51:44
